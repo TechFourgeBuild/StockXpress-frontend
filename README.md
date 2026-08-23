@@ -468,7 +468,7 @@ This project is deployed on **[Vercel](https://vercel.com)**.
 
 ## 👤 Maintainer
 
-**Aman** — Backend-leaning full-stack developer, building StockXpress end-to-end (Spring Boot API + this React frontend).
+**TechFourgeBuild** — Backend-leaning full-stack developer, building StockXpress end-to-end (Spring Boot API + this React frontend).
 
 <div align="center">
 
