@@ -249,10 +249,10 @@ pnpm install
 
 ### 3. Configure environment variables
 
-Copy the example file (or create `.env` manually) and fill in the required values — see [Environment Variables](#-environment-variables) below.
+Copy the example file (or create `.env` manually) and fill in the required values 
 
 ```bash
-cp .env.example .env   # if an example file exists in your repo
+cp .env.example 
 ```
 
 ### 4. Run the development server
