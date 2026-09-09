@@ -1,12 +1,15 @@
-import axios from 'axios';
+import axios from "axios";
+import { store } from '../store'; // adjust path
+import { setToken, logout } from '../store/slices/authSlice';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1';
+const BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api/v1";
 
 // ✅ Create axios instance
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
   withCredentials: true, // ✅ Refresh token cookie automatically bhejne ke liye
 });
@@ -14,13 +17,13 @@ const axiosInstance = axios.create({
 // ✅ Request Interceptor — Attach Access Token
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // ✅ Response Interceptor — Handle Token Expiry
@@ -65,11 +68,12 @@ axiosInstance.interceptors.response.use(
         const response = await axios.post(
           `${BASE_URL}/auth/refresh-token`,
           {},
-          { withCredentials: true }
+          { withCredentials: true },
         );
 
         const newAccessToken = response.data.accessToken;
-        localStorage.setItem('accessToken', newAccessToken);
+        localStorage.setItem("accessToken", newAccessToken);
+        store.dispatch(setToken(newAccessToken));
 
         // ✅ Retry all queued requests
         processQueue(null, newAccessToken);
@@ -78,10 +82,10 @@ axiosInstance.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        // ✅ Refresh failed → Logout user
+        // ✅ Refresh failed → Logout user;
         processQueue(refreshError, null);
-        localStorage.removeItem('accessToken');
-        window.location.href = '/login';
+        localStorage.removeItem("accessToken");
+        store.dispatch(logout()); // instead of window.location.href
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
@@ -89,7 +93,7 @@ axiosInstance.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosInstance;
