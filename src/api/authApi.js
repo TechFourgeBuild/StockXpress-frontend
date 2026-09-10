@@ -34,6 +34,6 @@ export const refreshToken = async () => {
 
 // ✅ Get Current User Profile
 export const getCurrentUser = async () => {
-  const response = await axiosInstance.get('/auth/me'); // ✅ Is endpoint ko backend me add karna hoga
+  const response = await axiosInstance.get('/auth/me'); 
   return response.data;
 };
